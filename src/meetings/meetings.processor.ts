@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { MeetingBaasService } from './meeting-baas.service';
@@ -66,6 +69,10 @@ export class MeetingsProcessor extends WorkerHost {
         id: parseInt(job.data.meetingId),
       });
 
+      if (!meeting) {
+        throw new Error(`Meeting with ID ${job.data.meetingId} not found.`);
+      }
+
       // Create Twenty Activity
       const twentyActivity = await this.twentyService.createActivity({
         title: meeting.title,
@@ -85,7 +92,7 @@ export class MeetingsProcessor extends WorkerHost {
         twentyActivityId: twentyActivity.id,
       });
 
-      this.wsGateway.sendJobUpdate(job.id, 'completed', {
+      this.wsGateway.sendJobUpdate(job.id!, 'completed', {
         ...savedNotes,
         twentyActivityId: twentyActivity.id,
       });

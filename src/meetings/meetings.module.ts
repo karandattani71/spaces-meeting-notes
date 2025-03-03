@@ -8,6 +8,7 @@ import { ActionItem } from './entities/action-item.entity';
 import { AppWebSocketGateway } from '../websocket/websocket.gateway';
 import { Meeting } from './entities/meeting.entity';
 import { BullModule } from '@nestjs/bullmq';
+import { TwentyService } from '../twenty/twenty.service';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { BullModule } from '@nestjs/bullmq';
     }),
   ],
   controllers: [MeetingsController],
-  providers: [MeetingsProcessor, MeetingBaasService, AppWebSocketGateway],
+  providers: [MeetingsProcessor, MeetingBaasService, AppWebSocketGateway, TwentyService],
 })
 export class MeetingModule {}
